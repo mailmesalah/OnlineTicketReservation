@@ -1,0 +1,68 @@
+<html>
+<head>
+
+</head>
+<body>
+<h4>Enter your details...<h4>
+
+
+<form name="form1" action="CreateAccount.jsp" method="post">
+Username:
+<input type="text" name="username"value=""><br>
+Password:
+<input type="password" name="password"value=""><br>
+Re enter:
+<input type="password" name="rpassword"value=""><br>
+Name:
+<input type="text" name="uname"value=""><br>
+Address:
+<input type="text" name="address"value=""><br>
+Place:
+<input type="text" name="place"value=""><br>
+Pincode:
+<input type="text" name="pincode"value=""><br>
+State:
+<input type="text" name="state"value=""><br>
+Distric:
+<input type="text" name="district"value=""><br>
+email:
+<input type="text" name="email"value=""><br>
+Sex:
+<input type="text" name="sex"value=""><br>
+Age:
+<input type="text" name="age"value=""><br>
+Date of Birth:
+<input type="text" name="dateofbirth"value=""><br>
+Theater name:
+ <input type="text" name="theatername"value=""><br>
+Licence No:
+
+<input type="text" name="licenceno"value=""><br><br>
+Morning Show:
+<input type="text" name="morningshow"value=""><br>
+Noon Show:
+<input type="text" name="noonshow"value=""><br>
+Matney Show:
+<input type="text" name="matneyshow"value=""><br>
+First Show:
+<input type="text" name="firstshow"value=""><br>
+Second Show:
+<input type="text" name="secondshow"value=""><br><br>
+
+Balcony Seats:
+<input type="text" name="balconyseats"value=""><br>
+Second Class Seats:
+<input type="text" name="secondclassseats"value=""><br>
+First Class Seats:
+<input type="text" name="firstclassseats"value=""><br>
+Balcony Cost:
+<input type="text" name="balconycost"value=""><br>
+Second Class Cost:
+<input type="text" name="secondclasscost"value=""><br>
+First Class Cost:
+<input type="text" name="firstclasscost"value=""><br><br>
+
+<input type="submit" value="Submit"><br>
+
+</body>
+</html>

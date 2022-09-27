@@ -1,0 +1,178 @@
+<html>
+<head>
+</head>
+
+<body>
+<%@page import="java.io.*" %>
+<%@page import="java.util.*" %>
+<%@page import="java.sql.*" %>
+<%
+
+try{
+
+
+//connecting database
+	Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+	Connection con = DriverManager.getConnection("jdbc:odbc:dsn","","");
+	Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+	
+	String flms=request.getParameter("filmname");
+
+	ResultSet rs=stmt.executeQuery("select * from Accounts where MorningShow  or NoonShow or MatneyShow or FirstShow or SecondShow like '%"+flms+"%'");
+
+///////check for films
+		
+
+		String th=new String();
+		String temp=new String();
+		String fl=new String();
+		String pl=new String();
+		String cth=new String();
+		String cpl=new String();
+		int in=0;
+		int rlen=0;
+
+///////////////////////////////////////////selecting films,,,reduntancy should	be considered	
+
+
+
+
+		while(rs.next()){
+
+			in=0;
+			rlen++;
+
+
+			cpl=rs.getString("Place");
+
+			cth=rs.getString("TheaterName");
+
+			pl=pl+" "+cpl;
+			th=th+" "+cth;
+System.out.println(th);
+
+
+			for(int i=9;i<=13;i++){
+				
+				temp=rs.getString(i);
+				if((temp.indexOf(flms))>=0){
+					if(in==0){
+						in=1;
+					}
+					else{
+						pl=pl+" "+cpl;
+						th=th+" "+cth;						
+
+					}
+					fl=fl+" "+temp;
+				}	
+	
+			}			
+
+		}
+
+//////////////////////////////////////////Tokenizing the string
+
+System.out.println(th);
+
+		StringTokenizer stkt=new StringTokenizer(th," ");
+		StringTokenizer stkp=new StringTokenizer(pl," ");
+		StringTokenizer stkf=new StringTokenizer(fl," ");
+
+		int len=stkt.countTokens();
+System.out.println(len);
+System.out.println(stkp.countTokens());
+System.out.println(stkf.countTokens());
+		String tha[]=new String[len];/////for storing theater name list which has the films searched
+		String pla[]=new String[len];
+		String fla[]=new String[len];	
+
+		int i=0;	
+		while(stkf.hasMoreTokens()){///////////collecting
+		
+			fla[i]=stkf.nextToken();
+			tha[i]=stkt.nextToken();
+			pla[i]=stkp.nextToken();	
+			++i;	
+		
+		}
+
+		String than[]=new String[len];
+		String plan[]=new String[len];
+		String flan[]=new String[len];
+
+		int clen=0;
+		int k=0;
+		int thstatus=0;
+		int flstatus=0;
+		than[0]=tha[0];
+		plan[0]=pla[0];
+		flan[0]=fla[0];
+
+
+		i=0;
+		
+		while(i<len){
+			thstatus=0;
+			flstatus=0;
+
+			for(k=0;k<clen;++k){
+				if(tha[i].equals(than[k])){
+					
+					thstatus=1;
+					
+					if(fla[i].equals(flan[k])){
+
+						flstatus=1;
+
+
+					}
+				}
+
+
+			}
+			if((thstatus==1 && flstatus==0)||(thstatus==0)){
+			
+				flan[k]=fla[i];
+				plan[k]=pla[i];
+				than[k]=tha[i];
+				++clen;
+//System.out.println(than[k]);
+//System.out.println(flan[k]);
+
+
+			}
+		
+			++i;
+
+		}
+	
+
+
+
+
+
+//checking
+
+	out.println("<h4>Search Results are ...</h4>");
+
+	for(i=0;i<clen;++i){
+                out.println((i+1)+". <a href=\"ReserveSeats.jsp?theater="+than[i]+"\"> Theater "+than[i]+" Film<b> "+flan[i]+"</b> Place "+plan[i]+" </a><br><br>");
+
+	}
+
+	
+	rs.close();
+	stmt.close();
+        con.close();
+
+//out.println("<br>works till catch()");
+
+} catch(Exception e) {
+	System.out.println(e);
+}
+
+
+%>
+</body>
+</html>

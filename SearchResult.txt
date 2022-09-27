@@ -1,0 +1,91 @@
+<html>
+<head>
+</head>
+<body>
+<%@page import="java.io.*" %>
+<%@page import="java.util.*" %>
+<%@page import="java.sql.*" %>
+<%
+try{
+	String src=request.getParameter("searchselect");
+	String sft=request.getParameter("text1");
+
+
+
+
+
+//connecting database
+	Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+	Connection con = DriverManager.getConnection("jdbc:odbc:dsn","","");
+	Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+	ResultSet rs;
+
+	if(src.equals("Film")){
+
+///////check for films
+		
+		rs=stmt.executeQuery("select * from Accounts");
+
+		String temp=new String();
+///////////////////////////////////////////selecting films,,,reduntancy should	be considered
+/////////////////////////////////////search without case checking///////change the two strings into any case and check	
+
+		
+		while(rs.next()){
+			for(int i=9;i<=13;++i){
+				
+				temp=rs.getString(i);/////////////error occurs when this method is called more than once with the same argument
+				if((temp.indexOf(sft))>=0){
+
+//System.out.println("Hello");/////////////executes this line more than once ..why?///error not detected yet
+					response.sendRedirect("SelectedTheaters.jsp?filmname="+sft);
+					
+					
+				}		
+			}			
+
+			
+		}
+
+		response.sendRedirect("NoTheaterFind.jsp?filmname="+sft);
+		
+	}
+	else{
+
+/////////////////////////////select if some words matches
+
+		rs=stmt.executeQuery("select * from Accounts " );
+		ResultSetMetaData rsmd=rs.getMetaData();
+
+		String dat=new String();
+		
+
+		while(rs.next()){
+
+			dat=rs.getString(src);
+			if(dat.indexOf(sft)>=0){
+//System.out.println("Hello");
+
+				response.sendRedirect("TheatersFound.jsp?field="+src+"&data="+sft);						
+			}		
+
+	
+
+		}
+		response.sendRedirect("NoTheaterNamesFound.jsp?data="+sft);
+	}
+
+
+	//rs.close();
+	stmt.close();
+        con.close();
+
+out.println("<br>works till catch()");
+
+} catch(Exception e) {
+	System.out.println(e);
+}
+
+%>
+</body>
+</html>

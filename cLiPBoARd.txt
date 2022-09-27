@@ -1,0 +1,517 @@
+<html>
+<head>
+
+</head>
+<body>
+<%@page import="java.io.*" %>
+<%@page import="java.sql.*" %>
+<%
+try{
+
+//	Object un=session.getAttribute("username");
+//	System.out.println(un);
+//	Object pw=session.getAttribute("password");
+//connecting database
+	Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+	Connection con = DriverManager.getConnection("jdbc:odbc:dsn","","");
+	Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+
+
+	ResultSet rs=stmt.executeQuery("select * from Accounts ");
+	ResultSetMetaData rsmd=rs.getMetaData();
+	int i=0;
+	while(rs.next()){
+		
+		i++;
+
+	}
+	int len=i;
+	rs.beforeFirst();
+	
+	String thn[]=new String[len];
+	i=0;
+	while(rs.next()){
+		
+		thn[i]=rs.getString("TheaterName");	
+		++i;
+
+	}
+//////////////////////////////////////
+/*
+
+Sorting should be done while query for listing in order
+
+checking should be done for listinf show time, seats etc
+
+autocommit should be done
+
+should change lists according to its former lists
+
+*/
+	rs.beforeFirst();
+	/////////checking should be done
+	i=5;
+	String sht[]=new String[i];
+	rs.next();
+	//checking can be done here
+	sht[0]=rsmd.getColumnLabel(9);
+//System.out.println(sht[0]);
+	sht[1]=rsmd.getColumnLabel(10);
+//System.out.println(sht[1]);
+	sht[2]=rsmd.getColumnLabel(11);
+//System.out.println(sht[2]);
+	sht[3]=rsmd.getColumnLabel(12);
+//System.out.println(sht[3]);
+	sht[4]=rsmd.getColumnLabel(13);
+//System.out.println(sht[4]);
+
+/////////////////seats
+	i=3;
+	String sts[]=new String[i];
+	
+	//checking can be done here
+	sts[0]=rsmd.getColumnLabel(14);
+//System.out.println(sts[0]);
+	sts[1]=rsmd.getColumnLabel(15);
+//System.out.println(sts[1]);
+	sts[2]=rsmd.getColumnLabel(16);
+//System.out.println(sts[2]);
+
+
+////////////////films
+	i=5;
+	String flm[]=new String[i];
+	//checking can be done here
+	flm[0]=rs.getString(9);
+//System.out.println(flm[0]);
+	flm[1]=rs.getString(10);
+//System.out.println(flm[1]);
+	flm[2]=rs.getString(11);
+//System.out.println(flm[2]);
+	flm[3]=rs.getString(12);
+//System.out.println(flm[3]);
+	flm[4]=rs.getString(13);
+//System.out.println(flm[4]);
+
+////////////////seatcost
+
+	i=3;
+	String stc[]=new String[i];
+	
+	//checking can be done here
+	stc[0]=rs.getString(14);
+//System.out.println(stc[0]);
+	stc[1]=rs.getString(15);
+//System.out.println(stc[1]);
+	stc[2]=rs.getString(16);
+//System.out.println(stc[2]);
+	
+	
+%>    
+
+<form name="form1">                                                                       
+
+<select name="theatername">
+<%
+	for(i=0;i<len;i++){
+
+		out.println("<option value=\""+i+"\">"+thn[i]+"</option>");	
+
+	}
+
+%>
+
+</select>
+
+
+
+<select name="showtime">
+<%
+	for(i=0;i<5;i++){
+		out.println("<option value=\""+i+"\">"+sht[i]+"</option>");
+	}
+%>
+</select>
+
+
+
+
+<select name="seats">
+
+
+<%
+	for(i=0;i<3;i++){
+		out.println("<option value=\""+i+"\">"+sts[i]+"</option>");
+	}
+%>
+
+
+</select>
+
+
+
+<select name="films">
+
+<%/////////////////should be in text field or else
+	for(i=0;i<5;i++){
+		out.println("<option value=\""+i+"\">"+flm[i]+"</option>");
+	}
+%>
+
+</select>
+
+
+
+<select name="seatcost">
+<%//////////should be in textfield or else
+
+	for(i=0;i<3;i++){
+		out.println("<option value=\""+i+"\">"+stc[i]+"</option>");
+	}
+%>
+
+</select>
+
+<%/*////////////////////////////////
+///////////////////////////////////////
+*/%>
+
+<input type="submit" value="Submit">
+
+</form>
+
+<%	
+/*	
+	int i=0;
+	
+	
+	while(rs.next()){
+		
+	out.println("Hello");
+
+
+	}
+
+	rs.beforeFirst();
+	rs.afterLast();
+	rs.previous();
+	rs.next();
+	rs.absolute(int);
+	rs.relative(int);
+*/	
+	rs.close();
+	stmt.close();
+        con.close();
+
+out.println("<br>works till catch()");
+
+} catch(Exception e) {
+	System.out.println(e);
+}
+	
+%>
+
+
+</body>
+</html>
+
+
+
+
+///////////////////////////////////////////
+
+
+
+
+<html>
+<head>
+</head>
+
+<body>
+<%@page import="java.io.*" %>
+<%@page import="java.util.*" %>
+<%@page import="java.sql.*" %>
+
+<%
+try{
+
+	String th=request.getParameter("theater");////if null page is directly called
+//connecting database
+	Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+	Connection con = DriverManager.getConnection("jdbc:odbc:dsn","","");
+	Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+
+
+	ResultSet rs=stmt.executeQuery("select * from Accounts where TheaterName='"+th+"'");
+	ResultSetMetaData rsmd=rs.getMetaData();
+
+System.out.println(th);
+	out.println("<h3>"+th+"</h3>");
+
+
+/////////////////show times
+	int i=5;
+	String sht[]=new String[i];
+	rs.next();
+	//checking can be done here
+	sht[0]=rsmd.getColumnLabel(9);
+System.out.println(sht[0]);
+	sht[1]=rsmd.getColumnLabel(10);
+System.out.println(sht[1]);
+	sht[2]=rsmd.getColumnLabel(11);
+System.out.println(sht[2]);
+	sht[3]=rsmd.getColumnLabel(12);
+System.out.println(sht[3]);
+	sht[4]=rsmd.getColumnLabel(13);
+System.out.println(sht[4]);
+
+
+/////////////////seats
+	i=3;
+	String sts[]=new String[i];
+	
+	//checking can be done here
+	sts[0]=rsmd.getColumnLabel(14);
+//System.out.println(sts[0]);
+	sts[1]=rsmd.getColumnLabel(15);
+//System.out.println(sts[1]);
+	sts[2]=rsmd.getColumnLabel(16);
+//System.out.println(sts[2]);
+
+
+////////////////films
+	i=5;
+	String flm[]=new String[i];
+	//checking can be done here
+	flm[0]=rs.getString(9);
+//System.out.println(flm[0]);
+	flm[1]=rs.getString(10);
+//System.out.println(flm[1]);
+	flm[2]=rs.getString(11);
+//System.out.println(flm[2]);
+	flm[3]=rs.getString(12);
+//System.out.println(flm[3]);
+	flm[4]=rs.getString(13);
+//System.out.println(flm[4]);
+
+////////////////seatcost
+
+	i=3;
+	String stc[]=new String[i];
+	
+	//checking can be done here
+	stc[0]=rs.getString(14);
+//System.out.println(stc[0]);
+	stc[1]=rs.getString(15);
+//System.out.println(stc[1]);
+	stc[2]=rs.getString(16);
+//System.out.println(stc[2]);
+
+%>
+
+
+<form name="form1" action="Reserving.jsp">
+
+Show Time:
+<select name="showtime">
+<%
+
+	
+	for(i=0;i<5;i++){
+		out.println("<option value=\""+i+"\">"+sht[i]+"</option>");
+	}
+%>
+</select>
+
+
+<!select name="films">
+
+<%/////////////////should be in text field or else
+	
+
+
+	out.println("Film:<input type=\"textbox\" value=\""+flm[1]+"\">");///////////call a script function to select the film to display
+	/*for(i=0;i<5;i++){
+		out.println("<option value=\""+i+"\">"+flm[i]+"</option>");/////////////change
+	}*/
+%>
+
+<!/select>
+
+
+
+<br><br><p><h4>Seat:</h4>
+<!select name="seats">
+
+
+<%
+	for(i=0;i<3;i++){
+///////		out.println("<option value=\""+i+"\">"+sts[i]+"</option>");
+		out.println(sts[i]+":"+stc[i]+"<br>");
+
+
+	}
+%>
+
+
+<!/select>
+
+
+
+
+
+
+<!select name="seatcost">
+<%/*//////////should be in textfield or else
+
+	for(i=0;i<3;i++){
+		out.println("<option value=\""+i+"\">"+stc[i]+"</option>");
+	}
+*/%>
+
+
+<!/select>
+
+Enter your Credit card number:<input type ="textbox" value="" size="15"><br><br>
+
+
+<!input type="reset" value=" Clear All ">//////////////////////not working
+
+
+<input type="submit" value=" Submit ">
+
+</form>
+
+
+
+
+
+
+<%
+
+}catch(Exception e){System.out.println(e);}
+
+
+%>
+</body>
+</html>
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+
+
+<br><br><p><b>Seat costs:</b><br><br>
+
+<%
+	for(i=0;i<3;i++){
+
+		out.println(sts[i]+" : "+stc[i]+"<br><br>");
+
+
+	}
+%>
+
+<b>Select Date :</b><br><br>
+
+<select name="day">
+<%
+	for(i=0;i<10;++i){
+
+	out.println("<option value=\"\"></option>");
+	}
+%>
+</select>
+
+-
+
+<select name="month">
+<%
+	for(i=0;i<12;++i){
+
+	out.println("<option value=\"\"></option>");
+	}
+%>
+</select>
+
+-
+
+<select name="year">
+<%
+	for(i=0;i<12;++i){
+
+	out.println("<option value=\"\"></option>");
+	}
+%>
+</select><br><br>
+
+<b>Enter your Credit card number:</b><input type ="textbox" value="" size="15"><br><br>
+
+
+<input type="reset" value=" Clear All ">//////////////////////not working
+
+
+<input type="submit" value=" Submit ">
+
+
+/////////////////////////////////////////////////////////////////////////
+
+<html>
+<head>
+</head>
+
+<body>
+<%@page import="java.io.*" %>
+<%@page import="java.util.*" %>
+<%@page import="java.sql.*" %>
+<%
+
+try{
+
+	String months[] = {"Jan", "Feb", "Mar", "Apr","May", "Jun", "Jul", "Aug","Sep", "Oct", "Nov", "Dec"};
+
+	// Create a calendar initialized with the
+	// current date and time in the default
+	// locale and timezone.
+
+	Calendar calendar = Calendar.getInstance();
+
+	// Display current time and date information.
+
+	out.print("Date: ");
+	out.print(months[calendar.get(Calendar.MONTH)]);
+	out.print(" " + calendar.get(Calendar.DATE) + " ");
+	out.println(calendar.get(Calendar.YEAR));
+	out.print("Time: ");
+	out.print(calendar.get(Calendar.HOUR) + ":");
+	out.print(calendar.get(Calendar.MINUTE) + ":");
+	out.println(calendar.get(Calendar.SECOND));
+
+	// Set the time and date information and display it.
+
+	calendar.set(Calendar.HOUR, 10);
+	calendar.set(Calendar.MINUTE, 29);
+	calendar.set(Calendar.SECOND, 22);
+	out.print("Updated time: ");
+	out.print(calendar.get(Calendar.HOUR) + ":");
+	out.print(calendar.get(Calendar.MINUTE) + ":");
+	out.println(calendar.get(Calendar.SECOND));
+
+
+
+
+
+}
+catch(Exception e){
+
+	System.out.println(e);
+
+
+}
+
+%>
+
+
+</body>
+</html>
+

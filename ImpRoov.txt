@@ -1,0 +1,16 @@
+Study about tickets and its life time(duration) etc
+Study about credit card
+/****************Have a solution on check availability
+Check spelling mistakes like "matney to matinee"
+design for the user
+improve data base
+for testing some where conditions in database access commands are left,
+should be kept back,
+date formate shoould be correct,
+fill all the blanks,
+data type validation should be done
+,for theater owners give the capability to check ticket codes.
+up to date by clicking the webpage(date table)
+
+
+/*************Check House full
